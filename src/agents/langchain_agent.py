@@ -4,8 +4,8 @@ from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import HumanMessage, SystemMessage
-from tools import get_all_tools, TavilySearchTool
-from config import LLM_PROVIDER, OPENAI_API_KEY, ANTHROPIC_API_KEY
+from src.tools.langchain_tools import get_all_tools, TavilySearchTool
+from src.utils.config import LLM_PROVIDER, OPENAI_API_KEY, ANTHROPIC_API_KEY
 
 
 class BlogPostAgent:

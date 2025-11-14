@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Main entry point for the blog post creator agent."""
 import sys
-from config import validate_config
-from agent import BlogPostAgent, SimpleResearchWriter
-from crew_agent import BlogPostCrew
+from src.utils.config import validate_config
+from src.agents.langchain_agent import BlogPostAgent, SimpleResearchWriter
+from src.agents.crew_agent import BlogPostCrew
 
 
 def main():

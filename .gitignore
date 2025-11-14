@@ -42,3 +42,8 @@ Thumbs.db
 crew_metrics_*.json
 evaluation_*.json
 *.log
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+*/.ipynb_checkpoints/*

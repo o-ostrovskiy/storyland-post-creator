@@ -3,8 +3,8 @@ import os
 from crewai import Agent, Task, Crew, Process
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
-from crew_tools import TavilySearchTool, GhostPublishTool
-from config import (
+from src.tools.crew_tools import TavilySearchTool, GhostPublishTool
+from src.utils.config import (
     LLM_PROVIDER,
     OPENAI_API_KEY,
     ANTHROPIC_API_KEY,
@@ -17,8 +17,8 @@ from config import (
     EXPORT_EVALUATION,
     MIN_QUALITY_SCORE
 )
-from observability import CrewObserver
-from evaluation import ContentEvaluator, AgentEvaluator, EvaluationReporter
+from src.utils.observability import CrewObserver
+from src.utils.evaluation import ContentEvaluator, AgentEvaluator, EvaluationReporter
 
 
 class BlogPostCrew:

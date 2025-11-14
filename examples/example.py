@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Example usage of the blog post creator agent."""
-from config import validate_config
-from agent import SimpleResearchWriter, BlogPostAgent
-from crew_agent import BlogPostCrew
+from src.utils.config import validate_config
+from src.agents.langchain_agent import SimpleResearchWriter, BlogPostAgent
+from src.agents.crew_agent import BlogPostCrew
 
 
 def example_with_simple_writer():

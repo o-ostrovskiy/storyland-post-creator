@@ -188,7 +188,7 @@ Use in your own Python code:
 
 **Option 1: CrewAI Multi-Agent (Recommended)**
 ```python
-from crew_agent import BlogPostCrew
+from src.agents.crew_agent import BlogPostCrew
 
 # Create the crew
 crew = BlogPostCrew()
@@ -204,7 +204,7 @@ print(result)
 
 **Option 2: LangChain Simple Chain**
 ```python
-from agent import SimpleResearchWriter
+from src.agents.langchain_agent import SimpleResearchWriter
 
 # Create the writer
 writer = SimpleResearchWriter()
@@ -220,7 +220,7 @@ print(result)
 
 **Option 3: LangChain Full Agent**
 ```python
-from agent import BlogPostAgent
+from src.agents.langchain_agent import BlogPostAgent
 
 # Create the agent
 agent = BlogPostAgent()
@@ -240,37 +240,69 @@ Run the example script:
 
 ```bash
 # CrewAI multi-agent system (recommended)
-python example.py crewai
+python examples/example.py crewai
 
 # LangChain simple step-by-step writer
-python example.py simple
+python examples/example.py simple
 
 # LangChain full agent implementation
-python example.py agent
+python examples/example.py agent
 
 # Short topic examples
-python example.py short
+python examples/example.py short
 ```
+
+### Interactive Jupyter Notebook
+
+For interactive testing and experimentation, use the Jupyter notebook:
+
+```bash
+# Start Jupyter
+jupyter notebook
+
+# Then open: notebooks/test_agents.ipynb
+```
+
+The notebook provides:
+- Pre-configured test topics
+- Interactive testing of all three implementations
+- Side-by-side comparison tools
+- Debugging and exploration cells
+- Quick test functions for rapid iteration
 
 ## Project Structure
 
 ```
 post-creator/
-├── agent.py              # LangChain agent implementations
-├── crew_agent.py         # CrewAI multi-agent system (RECOMMENDED)
-├── tools.py              # Custom LangChain tools (Tavily, Ghost)
-├── crew_tools.py         # CrewAI tools (Tavily, Ghost)
-├── config.py             # Configuration and environment validation
-├── observability.py      # Agent performance tracking and metrics
-├── evaluation.py         # Content quality evaluation system
-├── main.py               # CLI entry point
-├── example.py            # Usage examples for all implementations
-├── requirements.txt      # Python dependencies
-├── .env.example          # Example environment variables
-├── .gitignore           # Git ignore rules
-├── README.md            # This file
-├── OBSERVABILITY.md     # Observability documentation
-└── EVALUATION.md        # Evaluation framework documentation
+├── src/                           # Source code directory
+│   ├── __init__.py
+│   ├── agents/                    # Agent implementations
+│   │   ├── __init__.py
+│   │   ├── langchain_agent.py    # LangChain agents (Full Agent & Simple Chain)
+│   │   └── crew_agent.py         # CrewAI multi-agent system (RECOMMENDED)
+│   ├── tools/                     # Tool implementations
+│   │   ├── __init__.py
+│   │   ├── langchain_tools.py    # LangChain tools (Tavily, Ghost)
+│   │   └── crew_tools.py         # CrewAI tools (Tavily, Ghost)
+│   └── utils/                     # Utility modules
+│       ├── __init__.py
+│       ├── config.py             # Configuration and environment validation
+│       ├── observability.py      # Agent performance tracking and metrics
+│       └── evaluation.py         # Content quality evaluation system
+├── notebooks/                     # Jupyter notebooks for testing
+│   └── test_agents.ipynb         # Interactive agent testing notebook
+├── examples/                      # Example scripts
+│   └── example.py                # Usage examples for all implementations
+├── docs/                          # Documentation
+│   ├── QUICKSTART.md             # Quick start guide
+│   ├── OBSERVABILITY.md          # Observability documentation
+│   └── EVALUATION.md             # Evaluation framework documentation
+├── main.py                        # CLI entry point
+├── setup.sh                       # Setup script
+├── requirements.txt               # Python dependencies
+├── .env.example                   # Example environment variables
+├── .gitignore                    # Git ignore rules
+└── README.md                     # This file
 ```
 
 ## How It Works

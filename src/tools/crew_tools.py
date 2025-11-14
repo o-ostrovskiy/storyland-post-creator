@@ -7,7 +7,7 @@ import jwt
 import requests
 from datetime import datetime as date
 from tavily import TavilyClient
-from config import TAVILY_API_KEY, GHOST_URL, GHOST_ADMIN_API_KEY
+from src.utils.config import TAVILY_API_KEY, GHOST_URL, GHOST_ADMIN_API_KEY
 
 
 class TavilySearchInput(BaseModel):

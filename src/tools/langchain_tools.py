@@ -7,7 +7,7 @@ from typing import Optional, Type
 from langchain_core.tools import BaseTool
 from langchain_community.tools.tavily_search import TavilySearchResults
 from pydantic import BaseModel, Field
-from config import TAVILY_API_KEY, GHOST_URL, GHOST_ADMIN_API_KEY
+from src.utils.config import TAVILY_API_KEY, GHOST_URL, GHOST_ADMIN_API_KEY
 
 
 class TavilySearchTool:

@@ -5,7 +5,7 @@ import requests
 from datetime import datetime as date
 from typing import Optional, Type
 from langchain_core.tools import BaseTool
-from langchain_community.tools.tavily_search import TavilySearchResults
+from langchain_tavily import TavilySearch
 from pydantic import BaseModel, Field
 from src.utils.config import TAVILY_API_KEY, GHOST_URL, GHOST_ADMIN_API_KEY
 
@@ -16,13 +16,9 @@ class TavilySearchTool:
     @staticmethod
     def create():
         """Create and return a Tavily search tool."""
-        return TavilySearchResults(
+        return TavilySearch(
             api_key=TAVILY_API_KEY,
             max_results=5,
-            search_depth="advanced",
-            include_answer=True,
-            include_raw_content=False,
-            include_images=False,
         )
 
 

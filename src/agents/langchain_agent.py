@@ -146,7 +146,7 @@ class SimpleResearchWriter:
 
         # Initialize tools
         self.search_tool = TavilySearchTool.create()
-        from tools import GhostPublishTool
+        from src.tools.langchain_tools import GhostPublishTool
         self.publish_tool = GhostPublishTool()
 
     def create_and_publish_post(self, topic_description: str) -> str:

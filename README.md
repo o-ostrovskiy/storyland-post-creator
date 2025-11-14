@@ -1,23 +1,48 @@
 # Blog Post Creator Agent
 
-An intelligent multi-agent system built with LangChain that automatically researches, writes, and publishes blog posts to Ghost CMS.
+An intelligent multi-agent system built with LangChain and CrewAI that automatically researches, writes, and publishes blog posts to Ghost CMS.
 
 ## Features
 
 - **Automated Research**: Uses Tavily API to search the web for current information on any topic
 - **Intelligent Writing**: Leverages GPT-4 or Claude to create well-structured, engaging blog posts
 - **Automatic Publishing**: Publishes directly to Ghost CMS with proper formatting and tags
-- **Multi-Agent Architecture**: Choose between full agent autonomy or step-by-step chain implementation
+- **Multi-Agent Collaboration**: CrewAI-powered specialized agents (Researcher, Writer, Publisher) working together
+- **Multiple Implementations**: Choose between CrewAI multi-agent, LangChain agent, or simple chain
 - **Flexible LLM Support**: Works with OpenAI (GPT-4) or Anthropic (Claude) models
+- **Built-in Observability**: Track agent performance, task execution, and content quality metrics
+- **Content Evaluation**: Automated quality assessment for readability, structure, and SEO
 
 ## Architecture
 
-The system offers two implementations:
+The system offers three implementations:
 
-### 1. Full Agent (BlogPostAgent)
+### 1. CrewAI Multi-Agent System (Recommended)
+A sophisticated multi-agent collaboration using CrewAI framework with specialized agents:
+
+**Agents:**
+- **Content Researcher**: Expert at finding comprehensive, accurate information using web search
+- **Blog Content Writer**: Professional writer creating engaging, SEO-optimized content
+- **Content Publisher**: Publishing specialist handling Ghost CMS integration and metadata
+
+**Workflow:**
+1. **Research Task**: Researcher gathers facts, statistics, trends, and insights
+2. **Title Generation**: Writer creates compelling, SEO-friendly title
+3. **Content Creation**: Writer produces well-structured HTML content (800-1500 words)
+4. **Tag Generation**: Writer generates relevant tags for categorization
+5. **Publishing**: Publisher posts to Ghost CMS with proper formatting
+
+**Advantages:**
+- Clear separation of concerns with specialized agents
+- Built-in task dependencies and context sharing
+- Sequential process ensures quality at each stage
+- Integrated observability and evaluation
+- Better handling of complex workflows
+
+### 2. Full Agent (BlogPostAgent)
 Uses LangChain's agent framework with tool-calling capabilities for autonomous operation.
 
-### 2. Simple Chain (SimpleResearchWriter)
+### 3. Simple Chain (SimpleResearchWriter)
 A more predictable step-by-step approach:
 1. **Research**: Searches the web using Tavily
 2. **Title Generation**: Creates an SEO-friendly title
@@ -144,7 +169,10 @@ python main.py
 
 You'll be asked to:
 1. Enter your blog topic description
-2. Choose between full agent or simple chain implementation
+2. Choose between three implementations:
+   - **Option 1**: Full Agent (LangChain - more autonomous)
+   - **Option 2**: Simple Chain (LangChain - step-by-step)
+   - **Option 3**: CrewAI Multi-Agent (Recommended - structured workflow)
 
 ### Command Line Mode
 
@@ -158,6 +186,23 @@ python main.py "Write about the latest trends in AI and machine learning"
 
 Use in your own Python code:
 
+**Option 1: CrewAI Multi-Agent (Recommended)**
+```python
+from crew_agent import BlogPostCrew
+
+# Create the crew
+crew = BlogPostCrew()
+
+# Define your topic
+topic = """Write a blog post about sustainable living practices
+for urban dwellers. Include practical tips and recent statistics."""
+
+# Create and publish
+result = crew.create_and_publish_post(topic)
+print(result)
+```
+
+**Option 2: LangChain Simple Chain**
 ```python
 from agent import SimpleResearchWriter
 
@@ -173,15 +218,34 @@ result = writer.create_and_publish_post(topic)
 print(result)
 ```
 
+**Option 3: LangChain Full Agent**
+```python
+from agent import BlogPostAgent
+
+# Create the agent
+agent = BlogPostAgent()
+
+# Define your topic
+topic = """Write a blog post about sustainable living practices
+for urban dwellers. Include practical tips and recent statistics."""
+
+# Create and publish
+result = agent.create_and_publish_post(topic)
+print(result)
+```
+
 ### Examples
 
 Run the example script:
 
 ```bash
-# Simple step-by-step writer (recommended)
+# CrewAI multi-agent system (recommended)
+python example.py crewai
+
+# LangChain simple step-by-step writer
 python example.py simple
 
-# Full agent implementation
+# LangChain full agent implementation
 python example.py agent
 
 # Short topic examples
@@ -192,51 +256,84 @@ python example.py short
 
 ```
 post-creator/
-├── agent.py              # Main agent implementations
+├── agent.py              # LangChain agent implementations
+├── crew_agent.py         # CrewAI multi-agent system (RECOMMENDED)
 ├── tools.py              # Custom LangChain tools (Tavily, Ghost)
+├── crew_tools.py         # CrewAI tools (Tavily, Ghost)
 ├── config.py             # Configuration and environment validation
+├── observability.py      # Agent performance tracking and metrics
+├── evaluation.py         # Content quality evaluation system
 ├── main.py               # CLI entry point
-├── example.py            # Usage examples
+├── example.py            # Usage examples for all implementations
 ├── requirements.txt      # Python dependencies
 ├── .env.example          # Example environment variables
 ├── .gitignore           # Git ignore rules
-└── README.md            # This file
+├── README.md            # This file
+├── OBSERVABILITY.md     # Observability documentation
+└── EVALUATION.md        # Evaluation framework documentation
 ```
 
 ## How It Works
 
-### SimpleResearchWriter (Recommended)
+### CrewAI Multi-Agent System (Recommended)
 
-1. **Research Phase**:
-   - Takes your topic description
-   - Searches the web using Tavily for current information
-   - Gathers facts, statistics, and insights
+The CrewAI implementation uses a collaborative team of specialized agents:
 
-2. **Writing Phase**:
-   - Generates an engaging, SEO-friendly title
-   - Creates well-structured HTML content (800-1500 words)
-   - Includes headings, paragraphs, lists, and formatting
-   - Incorporates research findings
+1. **Research Task** (Content Researcher Agent):
+   - Receives the topic description
+   - Uses Tavily search tool to gather comprehensive information
+   - Collects facts, statistics, trends, and expert insights
+   - Produces a detailed research summary
 
-3. **Publishing Phase**:
-   - Generates relevant tags
-   - Publishes to Ghost CMS
-   - Returns the published post URL
+2. **Title Generation Task** (Blog Content Writer Agent):
+   - Reviews the research findings
+   - Creates a compelling, SEO-friendly title (50-70 characters)
+   - Ensures clarity and keyword relevance
 
-### BlogPostAgent (Advanced)
+3. **Content Creation Task** (Blog Content Writer Agent):
+   - Uses research insights to write engaging content
+   - Produces 800-1500 words in proper HTML format
+   - Structures content with H2/H3 headings, paragraphs, and lists
+   - Maintains consistency with title and research
 
-Uses LangChain's agent framework to autonomously:
-- Decide when to search for information
-- Determine how much research is needed
-- Write and structure the content
-- Publish to Ghost
+4. **Tag Generation Task** (Blog Content Writer Agent):
+   - Analyzes title and content
+   - Generates 3-5 relevant tags for categorization
+   - Ensures tags are useful for SEO and discovery
+
+5. **Publishing Task** (Content Publisher Agent):
+   - Receives title, content, and tags from previous tasks
+   - Uses Ghost publish tool to create the post
+   - Returns confirmation with published post URL
+
+**Benefits of CrewAI Approach:**
+- **Task Dependencies**: Each task has access to outputs from previous tasks
+- **Specialization**: Each agent has a clear role and expertise
+- **Process Control**: Sequential execution ensures quality at each stage
+- **Built-in Metrics**: Automatic tracking of task duration and agent performance
+- **Quality Assurance**: Integrated content evaluation and scoring
+
+### SimpleResearchWriter (LangChain)
+
+Step-by-step approach using LangChain:
+
+1. **Research Phase**: Searches the web using Tavily for current information
+2. **Writing Phase**: Generates title and creates well-structured HTML content
+3. **Publishing Phase**: Generates tags and publishes to Ghost CMS
+
+### BlogPostAgent (LangChain - Advanced)
+
+Autonomous LangChain agent that:
+- Decides when to search for information
+- Determines how much research is needed
+- Writes and structures the content
+- Publishes to Ghost
 
 ## Customization
 
 ### Change LLM Model
 
-Edit `agent.py` and modify the model parameter:
-
+**For CrewAI (crew_agent.py):**
 ```python
 # For OpenAI
 self.llm = ChatOpenAI(
@@ -248,6 +345,38 @@ self.llm = ChatOpenAI(
 self.llm = ChatAnthropic(
     model="claude-3-5-sonnet-20241022",  # or "claude-3-opus-20240229"
     temperature=0.7,
+)
+```
+
+**For LangChain (agent.py):**
+```python
+# Same as above
+self.llm = ChatOpenAI(model="gpt-4-turbo-preview", temperature=0.7)
+# or
+self.llm = ChatAnthropic(model="claude-3-5-sonnet-20241022", temperature=0.7)
+```
+
+### Customize Agent Roles and Tasks (CrewAI)
+
+Edit `crew_agent.py` to modify agent behaviors:
+
+```python
+# Customize the researcher
+def _create_researcher(self) -> Agent:
+    return Agent(
+        role="Content Researcher",
+        goal="Your custom goal",
+        backstory="Your custom backstory...",
+        tools=[self.search_tool],
+        llm=self.llm,
+        verbose=True,
+    )
+
+# Customize task descriptions in create_tasks()
+research_task = Task(
+    description="Your custom research instructions...",
+    expected_output="What you expect as output...",
+    agent=self.researcher,
 )
 ```
 
@@ -288,6 +417,35 @@ class MyCustomTool(BaseTool):
 
 Then add to `get_all_tools()` function.
 
+### Configure Observability and Evaluation (CrewAI)
+
+The CrewAI implementation includes built-in observability and evaluation features. Configure them in your `.env` file:
+
+```env
+# Observability Settings
+ENABLE_OBSERVABILITY=true          # Track agent performance and metrics
+EXPORT_METRICS=true                # Export metrics to JSON files
+
+# LangSmith Integration (optional)
+ENABLE_LANGSMITH=true              # Enable LangSmith tracing
+LANGSMITH_API_KEY=your_key_here    # Your LangSmith API key
+LANGSMITH_PROJECT=blog-post-creator # Project name in LangSmith
+
+# Evaluation Settings
+ENABLE_EVALUATION=true             # Evaluate content quality
+EXPORT_EVALUATION=true             # Export evaluation results to JSON
+MIN_QUALITY_SCORE=0.7             # Minimum acceptable quality score (0-1)
+```
+
+**What you get:**
+- **Agent Metrics**: Track LLM calls, tokens used, errors, and execution time per agent
+- **Task Metrics**: Monitor task duration, status, and outputs
+- **Content Evaluation**: Automatic scoring for readability, structure, completeness, and SEO
+- **LangSmith Tracing**: Visualize agent interactions and debug in LangSmith dashboard
+- **Quality Warnings**: Get alerted if content quality falls below threshold
+
+See `OBSERVABILITY.md` and `EVALUATION.md` for detailed documentation.
+
 ## Troubleshooting
 
 ### "Missing required environment variables"
@@ -306,16 +464,27 @@ Then add to `get_all_tools()` function.
 - Ensure you haven't exceeded rate limits
 
 ### Agent uses too many tokens
-- Use `SimpleResearchWriter` instead of `BlogPostAgent`
-- Reduce the `max_iterations` in `agent.py`
+- Use `BlogPostCrew` (CrewAI) for better token efficiency with structured workflow
+- Use `SimpleResearchWriter` instead of `BlogPostAgent` for LangChain
+- Reduce the `max_iterations` in `agent.py` for the full agent
 - Use a smaller model like GPT-3.5-turbo
+- Monitor token usage with observability features (CrewAI)
+
+### CrewAI-specific issues
+- **Tasks not completing**: Check agent verbose output for errors
+- **Quality score too low**: Adjust task descriptions or provide more detailed topics
+- **Missing task outputs**: Ensure task dependencies are properly configured in `create_tasks()`
 
 ## Tips for Best Results
 
-1. **Be Specific**: Provide clear, detailed topic descriptions
-2. **Include Context**: Mention the target audience, tone, or specific angles
-3. **Use Examples**: Reference similar posts or specific points to cover
-4. **Review Output**: Check the generated content before it goes live (use "draft" status)
+1. **Use CrewAI for Production**: The multi-agent system provides better consistency and quality
+2. **Be Specific**: Provide clear, detailed topic descriptions
+3. **Include Context**: Mention the target audience, tone, or specific angles
+4. **Use Examples**: Reference similar posts or specific points to cover
+5. **Enable Evaluation**: Turn on content evaluation to monitor quality metrics
+6. **Review Output**: Check the generated content and evaluation scores before publishing
+7. **Monitor Metrics**: Use observability features to track token usage and optimize costs
+8. **Start with Drafts**: Set Ghost status to "draft" initially to review before making posts live
 
 ## Example Topics
 
@@ -352,19 +521,23 @@ For issues or questions:
 ## Future Enhancements
 
 Potential improvements:
-- [ ] Support for featured images
-- [ ] Multiple Ghost site support
-- [ ] Scheduled publishing
-- [ ] SEO optimization analysis
-- [ ] Social media preview generation
-- [ ] Draft review workflow
-- [ ] Custom tone/style profiles
-- [ ] Multi-language support
+- [ ] Support for featured images via DALL-E or Stable Diffusion
+- [ ] Multiple Ghost site support (publish to multiple blogs)
+- [ ] Scheduled publishing with cron integration
+- [ ] Enhanced SEO optimization with keyword analysis
+- [ ] Social media preview generation (OG tags, Twitter cards)
+- [ ] A/B testing for titles and content variations
+- [ ] Custom tone/style profiles per blog category
+- [ ] Multi-language support with translation agents
+- [ ] Image sourcing and attribution from Unsplash/Pexels
+- [ ] Automated content calendar planning
 
 ## Credits
 
 Built with:
-- [LangChain](https://python.langchain.com/) - Agent framework
+- [CrewAI](https://www.crewai.io/) - Multi-agent orchestration framework
+- [LangChain](https://python.langchain.com/) - Agent framework and tools
 - [Tavily](https://tavily.com/) - Web search API
 - [Ghost](https://ghost.org/) - Publishing platform
 - [OpenAI](https://openai.com/) / [Anthropic](https://anthropic.com/) - Language models
+- [LangSmith](https://smith.langchain.com/) - Observability and tracing (optional)
